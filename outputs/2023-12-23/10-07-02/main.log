@@ -1,0 +1,46 @@
+[2023-12-23 10:07:02,716][flwr][INFO] - Starting Flower simulation, config: ServerConfig(num_rounds=10, round_timeout=None)
+[2023-12-23 10:07:07,702][flwr][INFO] - Flower VCE: Ray initialized with resources: {'node:127.0.0.1': 1.0, 'object_store_memory': 2962172313.0, 'memory': 5924344628.0, 'accelerator_type:G': 1.0, 'CPU': 12.0, 'GPU': 1.0, 'node:__internal_head__': 1.0}
+[2023-12-23 10:07:07,702][flwr][INFO] - Optimize your simulation with Flower VCE: https://flower.dev/docs/framework/how-to-run-simulations.html
+[2023-12-23 10:07:07,703][flwr][INFO] - Flower VCE: Resources for each Virtual Client: {'num_cpus': 2, 'num_gpus': 0.5}
+[2023-12-23 10:07:07,713][flwr][INFO] - Flower VCE: Creating VirtualClientEngineActorPool with 2 actors
+[2023-12-23 10:07:07,714][flwr][INFO] - Initializing global parameters
+[2023-12-23 10:07:07,715][flwr][INFO] - Requesting initial parameters from one random client
+[2023-12-23 10:07:12,570][flwr][INFO] - Received initial parameters from one random client
+[2023-12-23 10:07:12,570][flwr][INFO] - Evaluating initial parameters
+[2023-12-23 10:07:12,632][flwr][ERROR] - CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+[2023-12-23 10:07:12,642][flwr][ERROR] - Traceback (most recent call last):
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\simulation\app.py", line 308, in start_simulation
+    hist = run_fl(
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\server\app.py", line 225, in run_fl
+    hist = server.fit(num_rounds=config.num_rounds, timeout=config.round_timeout)
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\server\server.py", line 92, in fit
+    res = self.strategy.evaluate(0, parameters=self.parameters)
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\flwr\server\strategy\fedavg.py", line 163, in evaluate
+    eval_res = self.evaluate_fn(server_round, parameters_ndarrays, {})
+  File "E:\PROJECTS_FOR_REFERRAL\FederatedLearningFlowerTutorial\server.py", line 36, in evaluate_fn
+    loss, accuracy = test(model, testLoader, device)
+  File "E:\PROJECTS_FOR_REFERRAL\FederatedLearningFlowerTutorial\model.py", line 46, in test
+    net.to(device)
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\torch\nn\modules\module.py", line 1160, in to
+    return self._apply(convert)
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\torch\nn\modules\module.py", line 810, in _apply
+    module._apply(fn)
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\torch\nn\modules\module.py", line 833, in _apply
+    param_applied = fn(param)
+  File "C:\Users\ASUS\anaconda3\envs\flower_tutorial\lib\site-packages\torch\nn\modules\module.py", line 1158, in convert
+    return t.to(device, dtype if t.is_floating_point() or t.is_complex() else None, non_blocking)
+RuntimeError: CUDA error: invalid device ordinal
+CUDA kernel errors might be asynchronously reported at some other API call, so the stacktrace below might be incorrect.
+For debugging consider passing CUDA_LAUNCH_BLOCKING=1.
+Compile with `TORCH_USE_CUDA_DSA` to enable device-side assertions.
+
+
+[2023-12-23 10:07:12,645][flwr][ERROR] - Your simulation crashed :(. This could be because of several reasons.The most common are: 
+	 > Your system couldn't fit a single VirtualClient: try lowering `client_resources`.
+	 > All the actors in your pool crashed. This could be because: 
+		 - You clients hit an out-of-memory (OOM) error and actors couldn't recover from it. Try launching your simulation with more generous `client_resources` setting (i.e. it seems {'num_cpus': 2, 'num_gpus': 0.5} is not enough for your workload). Use fewer concurrent actors. 
+		 - You were running a multi-node simulation and all worker nodes disconnected. The head node might still be alive but cannot accommodate any actor with resources: {'num_cpus': 2, 'num_gpus': 0.5}.
