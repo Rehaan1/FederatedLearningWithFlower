@@ -1,5 +1,9 @@
 import hydra
 import flwr as fl
+import pickle
+
+from pathlib import Path
+from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, OmegaConf
 
 
@@ -42,7 +46,13 @@ def main(cfg: DictConfig):
     )
 
     ## 6. Save your results
-    
+    save_path = HydraConfig.get().runtime.output_dir
+    results_path = Path(save_path) / "results.pkl"
+
+    results = {"history": history, "anythingeElse": "here"}
+
+    with open(str(results_path), 'wb') as h:
+        pickle.dump(results, h, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == "__main__":
